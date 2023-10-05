@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 import geopandas as gpd
 
 
@@ -38,6 +38,13 @@ def gdf_to_postgis(engine, gdf, table_name):
                    if_exists= 'replace', 
                    index= False)
     
+
+def drop_pgsql_table(engine, table_name):
+    """ Drops tables from PostgresSQL database"""
+    connection= engine.connect()
+    connection.execute(text(f'DROP TABLE {table_name}'))
+    connection.commit()
+
     
 if __name__ == '__main__':
     
@@ -53,4 +60,11 @@ if __name__ == '__main__':
     #read a spatial file into gdf
     gdf= esri_to_gdf (aoi)
     
-    gdf_to_postgis(engine, gdf, '20230929_waterapplics_kfn')
+    table_name= 'waterapplics_kfn'
+    
+    gdf_to_postgis(engine, gdf, table_name)
+    
+    drop_table= False
+    
+    if drop_table== True:
+        drop_pgsql_table(engine, table_name)
