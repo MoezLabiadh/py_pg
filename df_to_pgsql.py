@@ -11,7 +11,7 @@ def connect_to_pgsql (user, password, host, dbname):
 
 
 def df_to_pgsql(engine, df, table_name):
-    """ Imports a dataframe to a pgsql table"""
+    """ Writes a dataframe to a pgsql table"""
     df.columns = df.columns.str.lower().str.replace(' ', '_')
     
     df.to_sql(name= table_name, 
